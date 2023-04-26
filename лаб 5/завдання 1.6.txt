@@ -1,0 +1,61 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+// Базовий клас транспортний засіб
+class Transport {
+protected:
+    string name; // назва транспортного засобу
+    double weight; // вага транспортного засобу
+    double maxSpeed; // максимальна швидкість транспортного засобу
+public:
+    Transport(string name, double weight, double maxSpeed) : name(name), weight(weight), maxSpeed(maxSpeed) {}
+    virtual ~Transport() {} // віртуальний деструктор, необхідний для коректного видалення екземплярів посилання на базовий клас
+    virtual void printInfo() const {
+        cout << "Transport: " << name << ", weight = " << weight << ", maxSpeed = " << maxSpeed << endl;
+    }
+};
+
+// Похідний клас автомобіль
+class Car : public Transport {
+private:
+    int numWheels; // кількість коліс автомобіля
+public:
+    Car(string name, double weight, double maxSpeed, int numWheels) : Transport(name, weight, maxSpeed), numWheels(numWheels) {}
+    ~Car() {}
+    void printInfo() const override {
+        cout << "Car: " << name << ", weight = " << weight << ", maxSpeed = " << maxSpeed << ", numWheels = " << numWheels << endl;
+    }
+};
+
+// Похідний клас вантажівка
+class Truck : public Transport {
+private:
+    double maxWeight; // максимальна вага, яку може перевезти вантажівка
+public:
+    Truck(string name, double weight, double maxSpeed, double maxWeight) : Transport(name, weight, maxSpeed), maxWeight(maxWeight) {}
+    ~Truck() {}
+    void printInfo() const override {
+        cout << "Truck: " << name << ", weight = " << weight << ", maxSpeed = " << maxSpeed << ", maxWeight = " << maxWeight << endl;
+    }
+};
+
+// Похідний клас пароплав
+class Steamboat : public Transport {
+private:
+    double maxLoad; // максимальне навантаження, яке може перевезти пароплав
+public:
+    Steamboat(string name, double weight, double maxSpeed, double maxLoad) : Transport(name, weight, maxSpeed), maxLoad(maxLoad) {}
+    ~Steamboat() {}
+    void printInfo() const override {
+        cout << "Steamboat: " << name << ", weight = " << weight << ", maxSpeed = " << maxSpeed << ", maxLoad = " << maxLoad << endl;
+    }
+};
+
+// Похідний клас літак
+class Airplane : public Transport {
+private:
+    double maxAltitude; // максимальна висота, на яку може піднятися літак
+public:
+    Airplane(string name, double weight, double maxSpeed, double

@@ -1,0 +1,71 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <random>
+
+using namespace std;
+
+// Клас карти
+class Card {
+private:
+    string suit; // масть карти
+    string rank; // номінал карти
+public:
+    Card(string suit, string rank) : suit(suit), rank(rank) {}
+    string getSuit() const { return suit; }
+    string getRank() const { return rank; }
+    void print() const { cout << rank << " of " << suit << endl; }
+};
+
+// Клас колоди карт
+class Deck {
+private:
+    vector<Card> cards; // масив карт у колоді
+public:
+    Deck(bool shuffle = false) {
+        // додаємо всі 52 карти до колоди
+        string suits[] = {"Clubs", "Diamonds", "Hearts", "Spades"};
+        string ranks[] = {"Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King"};
+        for (auto suit : suits) {
+            for (auto rank : ranks) {
+                cards.emplace_back(Card(suit, rank));
+            }
+        }
+        // перемішуємо колоду, якщо потрібно
+        if (shuffle) {
+            shuffleDeck();
+        }
+    }
+    // перемішує колоду
+    void shuffleDeck() {
+        random_device rd;
+        mt19937 g(rd());
+        shuffle(cards.begin(), cards.end(), g);
+    }
+    // виводить усі карти у колоді
+    void print() const {
+        for (auto card : cards) {
+            card.print();
+        }
+    }
+    // видаляє верхню карту у колоді та повертає її
+    Card dealCard() {
+        Card topCard = cards.back();
+        cards.pop_back();
+        return topCard;
+    }
+};
+
+// Клас пасьянсу, який є похідним від класу Deck
+class Solitaire : public Deck {
+public:
+    Solitaire() : Deck(true) {} // ініціалізуємо колоду, перемішуючи її випадковим чином
+    // перевіряє, чи є дві крайні карти одного кольору у вибраних трьох картах
+    bool checkCards(vector<Card>& selectedCards) const {
+        bool result = false;
+        if (selectedCards.size() == 3) {
+            string firstSuit = selectedCards.front().getSuit();
+            string lastSuit = selectedCards.back().getSuit();
+            if (firstSuit == lastSuit) {
+                // якщо кольори крайніх карт однакові, то перевіряємо, чи є серед них карти різних кольорів
+                result = any_of(selectedCards
